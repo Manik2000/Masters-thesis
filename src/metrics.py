@@ -49,10 +49,28 @@ def jaccard(cp_gt, cp_p, eps=10):
     """
     cm = cost_matrix(cp_gt, cp_p, eps=eps)
     row_ind, col_ind = linear_sum_assignment(cm)
-    tp = sum(cm[i, j] < 10 for (i, j) in zip(row_ind, col_ind))
+    tp = sum(cm[i, j] < eps for (i, j) in zip(row_ind, col_ind))
     fp = len(cp_p) - tp
     fn = len(cp_gt) - tp
     return tp / (tp + fp + fn)
+
+def annotation_error(cp_gt, cp_p):
+    """
+    Calculate the annotation error for change points predictions.
+    """
+    return abs(len(cp_gt) - len(cp_p))
+
+
+def f1_score(cp_gt, cp_p, eps=10):
+    """
+    Calculate the F1 score for change points predictions.
+    """
+    cm = cost_matrix(cp_gt, cp_p, eps=eps)
+    row_ind, col_ind = linear_sum_assignment(cm)
+    tp = sum(cm[i, j] < eps for (i, j) in zip(row_ind, col_ind))
+    fp = len(cp_p) - tp
+    fn = len(cp_gt) - tp
+    return 2 * tp / (2 * tp + fp + fn)
 
 
 if __name__ == "__main__":
