@@ -10,11 +10,12 @@ from src.datasets import AndiDataset
 
 
 def set_up_parser():
-    parser = argparse.ArgumentParser(description="Threshold tuning for change point detection")
+    parser = argparse.ArgumentParser(
+        description="Threshold tuning for change point detection"
+    )
     parser.add_argument("-T", type=int, default=90, help="Length of the trajectory")
     parser.add_argument("-N", type=int, default=100, help="Number of trajectories")
     return parser
-
 
 
 if __name__ == "__main__":
@@ -39,7 +40,9 @@ if __name__ == "__main__":
         alpha_dict[diff]["cp"] = []
         for _ in range(N):
             alpha = np.random.uniform(0.001, alpha_max)
-            traj, labels = generator.multi_state(T=T, N=1, alphas=[[alpha, 0], [alpha+diff, 0]], Ds=[[1, 0], [1, 0]])
+            traj, labels = generator.multi_state(
+                T=T, N=1, alphas=[[alpha, 0], [alpha + diff, 0]], Ds=[[1, 0], [1, 0]]
+            )
             alpha_dict[diff]["traj"].append(traj)
             alpha_dict[diff]["cp"].append(label_continuous_to_list(labels[:, 0, :])[0])
 
@@ -59,7 +62,9 @@ if __name__ == "__main__":
         for _ in range(N):
             D = np.random.choice(Ds) * np.random.uniform(0, 10)
             D2 = D * multiply
-            traj, labels = generator.multi_state(T=T, N=1, alphas=[[1.5, 0], [1.5, 0]], Ds=[[D, 0], [D2, 0]])
+            traj, labels = generator.multi_state(
+                T=T, N=1, alphas=[[1.5, 0], [1.5, 0]], Ds=[[D, 0], [D2, 0]]
+            )
             Ds_dict[multiply]["traj"].append(traj)
             Ds_dict[multiply]["cp"].append(label_continuous_to_list(labels[:, 0, :])[0])
 

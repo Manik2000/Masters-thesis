@@ -39,7 +39,7 @@ def rmse(cp_gt, cp_p, eps=10):
     costs = cm[row_ind, col_ind] < eps
     paired_gt = cp_gt[row_ind][costs]
     paired_p = cp_p[col_ind][costs]
-    return np.sqrt(np.mean((paired_gt - paired_p)**2))
+    return np.sqrt(np.mean((paired_gt - paired_p) ** 2))
 
 
 def jaccard(cp_gt, cp_p, eps=10):
@@ -53,6 +53,7 @@ def jaccard(cp_gt, cp_p, eps=10):
     fp = len(cp_p) - tp
     fn = len(cp_gt) - tp
     return tp / (tp + fp + fn)
+
 
 def annotation_error(cp_gt, cp_p):
     """
@@ -79,3 +80,5 @@ if __name__ == "__main__":
     print(rmse(cp_gt, cp_p))
     print(alpha_cp(cp_gt, cp_p))
     print(jaccard(cp_gt, cp_p))
+    print(f1_score(cp_gt, cp_p))
+    print(annotation_error(cp_gt, cp_p))

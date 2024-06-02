@@ -1,6 +1,4 @@
-import tensorflow as tf
 from keras import layers
-# from keras import backend as K
 from keras.initializers import Identity
 from tensorflow.python.keras import backend as K
 
@@ -26,11 +24,9 @@ class Dain(layers.Layer):
         self.transpose = layers.Permute((2, 1))
         self.reshape_2d = layers.Reshape((dim, n_features))
 
-
     @staticmethod
     def fn(elem):
         return K.switch(K.less_equal(elem, 1.0), K.ones_like(elem), elem)
-
 
     def call(self, inputs):
         # step 1: adapative average
@@ -42,7 +38,7 @@ class Dain(layers.Layer):
         inputs -= adaptive_avg
 
         # # step 2: adapative scaling
-        std = K.mean(inputs ** 2, axis=2)
+        std = K.mean(inputs**2, axis=2)
         std = K.sqrt(std + self.eps)
         adaptive_std = self.scaling_layer(std)
         adaptive_std = K.map_fn(self.fn, adaptive_std)

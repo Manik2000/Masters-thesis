@@ -16,9 +16,9 @@ class CPDetector:
         """
         X = []
         for i in range(len(trajectory) - self.window_length):
-            X.append(trajectory[i:i+self.window_length, :])
+            X.append(trajectory[i : i + self.window_length, :])
         return np.array(X)
-    
+
     def get_segments(self, prob_seq):
         """
         Get the segement of subsequent frames for which probability of change point is greater than threshold.
@@ -61,7 +61,7 @@ class CPDetector:
         return prob_seq
 
     def predict(self, trajectory) -> list:
-        if (trajectory.shape[0] <= self.window_length):
+        if trajectory.shape[0] <= self.window_length:
             return [trajectory.shape[0]]
         prob_seq = self.get_probabilities(trajectory)
         return self.get_change_points_preds(prob_seq) + [trajectory.shape[0]]

@@ -23,7 +23,9 @@ if __name__ == "__main__":
     data_dicts = [alphas_dict, Ds_dict]
     results = [{}, {}]
 
-    for result_dict, data_dict in tqdm(zip(results, data_dicts), total=2, desc="alpha or D"):
+    for result_dict, data_dict in tqdm(
+        zip(results, data_dicts), total=2, desc="alpha or D"
+    ):
         for key in tqdm(data_dict.keys()):
             result_dict[key] = {}
             content = data_dict[key]
@@ -32,8 +34,12 @@ if __name__ == "__main__":
 
             preds = [np.array(cp_detector(traj[:, 0, :])) for traj in trajs]
 
-            rmse_ = np.mean([rmse(np.array(true), pred) for (true, pred) in zip(true_cp, preds)])
-            f1_score_ = np.mean([f1_score(np.array(true), pred) for (true, pred) in zip(true_cp, preds)])
+            rmse_ = np.mean(
+                [rmse(np.array(true), pred) for (true, pred) in zip(true_cp, preds)]
+            )
+            f1_score_ = np.mean(
+                [f1_score(np.array(true), pred) for (true, pred) in zip(true_cp, preds)]
+            )
 
             result_dict[key]["rmse"] = rmse_
             result_dict[key]["f1_score"] = f1_score_

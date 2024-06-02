@@ -10,12 +10,25 @@ from src.datasets import AndiDataset
 
 M = 800
 lengths = [50, 85, 120]
-model_names = ["single_state", "multi_state", "confinemnet", "immobile", "dimmerization"]
+model_names = [
+    "single_state",
+    "multi_state",
+    "confinemnet",
+    "immobile",
+    "dimmerization",
+]
 thinning = [False, False, False, False, True]
 Ns = [2, 2, 2, 2, 150]
 
 
-def generate_changepoints_data(generator: AndiDataset, model_name: str, traj_lentgh: int, N: int, thinning: bool=False, M=M):
+def generate_changepoints_data(
+    generator: AndiDataset,
+    model_name: str,
+    traj_lentgh: int,
+    N: int,
+    thinning: bool = False,
+    M=M,
+):
     model = getattr(generator, model_name)
     model_X = []
     model_change_points = []
@@ -26,14 +39,20 @@ def generate_changepoints_data(generator: AndiDataset, model_name: str, traj_len
             while not is_valid:
                 try:
                     if model_name == "immobile":
-                        alphas, Ds = [generator.random_alpha_value(), np.random.uniform(0, 0.15)], \
-                                      [generator.random_D_value(), np.random.uniform(0, 0.15)]
+                        alphas, Ds = [
+                            generator.random_alpha_value(),
+                            np.random.uniform(0, 0.15),
+                        ], [generator.random_D_value(), np.random.uniform(0, 0.15)]
                     elif model_name == "single_state":
-                        alphas, Ds = generator.random_alpha_value(), generator.random_D_value()
+                        alphas, Ds = (
+                            generator.random_alpha_value(),
+                            generator.random_D_value(),
+                        )
                     else:
                         alphas, Ds = generator.get_alphas_and_Ds()
-                    trajs, labels = generate_trajectory_from_model(model, N=N, T=traj_lentgh, 
-                                                                   alphas=alphas, Ds=Ds)
+                    trajs, labels = generate_trajectory_from_model(
+                        model, N=N, T=traj_lentgh, alphas=alphas, Ds=Ds
+                    )
                     is_valid = True
                 except ValueError:
                     continue
@@ -45,23 +64,28 @@ def generate_changepoints_data(generator: AndiDataset, model_name: str, traj_len
             changepoints = generator.get_changepoints(labels)
             model_change_points.extend(changepoints)
             n = len(changepoints)
-            progress.update(task, advance=n) 
+            progress.update(task, advance=n)
     return np.concatenate(model_X, axis=1), model_change_points
 
 
-def get_changepoints_per_traj_length(dataset_generator: AndiDataset, length: int, M: int=M):
+def get_changepoints_per_traj_length(
+    dataset_generator: AndiDataset, length: int, M: int = M
+):
     all_X = []
     all_change_points = []
     all_labels = []
     for i, model_name in enumerate(model_names):
-        X, change_points = generate_changepoints_data(dataset_generator, model_name, length, Ns[i], thinning[i], M=M)
+        X, change_points = generate_changepoints_data(
+            dataset_generator, model_name, length, Ns[i], thinning[i], M=M
+        )
         all_X.append(X)
         all_change_points.extend(change_points)
         all_labels.extend(model_name for _ in range(len(change_points)))
     all_X = np.concatenate(all_X, axis=1).transpose(1, 0, 2)
 
-    val_X, test_X, val_change_points, test_change_points, val_labels, test_labels = train_test_split(all_X, all_change_points, 
-                                                                                                     all_labels, test_size=0.8)
+    val_X, test_X, val_change_points, test_change_points, val_labels, test_labels = (
+        train_test_split(all_X, all_change_points, all_labels, test_size=0.8)
+    )
 
     path = os.path.join("data", "final_eval", f"{length}")
     for i in ["val", "test"]:
