@@ -8,7 +8,6 @@ from sklearn.model_selection import train_test_split
 from src.data_generation.classifier_data import generate_trajectory_from_model
 from src.datasets import AndiDataset
 
-
 M = 800
 lengths = [50, 85, 120]
 model_names = ["single_state", "multi_state", "confinemnet", "immobile", "dimmerization"]

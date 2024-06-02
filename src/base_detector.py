@@ -3,7 +3,6 @@ import ruptures as rpt
 from ruptures.base import BaseCost
 from scipy.optimize import curve_fit
 
-
 __DT = 0.1
 
 
@@ -87,12 +86,12 @@ def estimate_with_noise_3(trajectory, mlag, k=2):
 
 
 def alpha_estim(x):
-    _, alpha = estimate_with_noise_3(x, 15)
+    _, alpha = estimate_with_noise_3(x, 5)
     return alpha
 
 
 def D_estim(x):
-    D, _ = estimate_with_noise_1(x, 15)
+    D, _ = estimate_with_noise_1(x, 5)
     return D
 
 
@@ -118,9 +117,15 @@ class MultiEstimCost(BaseCost):
         return sum(abs(estimates_1[i] - estimates_2[i]) for i in range(len(estimates_1)))
 
 
-def mw_rupture_cp_detection(trajectory, window_width=60):
-    algo = rpt.Window(width=window_width, custom_cost=MultiEstimCost([D_estim, alpha_estim]), jump=1)
-    penalty = np.log(len(trajectory)) * 2 * (0.12**2)
-    algo.fit(trajectory)
-    change_points = algo.predict(epsilon=penalty)
-    return change_points
+class BaseDetector:
+
+    def __init__(self, window_length=20):
+        self.window_length = window_length
+        self.algo = rpt.Window(width=window_length, custom_cost=MultiEstimCost([D_estim, alpha_estim]), jump=1)
+        self.penalty = 2 * np.log(window_length) * 0.12**2
+
+    def predict(self, trajectory):
+        self.algo.fit(trajectory)
+        change_points = self.algo.predict(epsilon=self.penalty)
+        return change_points
+    

@@ -40,12 +40,9 @@ if __name__ == "__main__":
     train_y = np.load(os.path.join(path, "train", "y_train.npy"))
     val_X = np.load(os.path.join(path, "val", "X_val.npy"))
     val_y = np.load(os.path.join(path, "val", "y_val.npy"))
-    test_X = np.load(os.path.join(path, "test", "X_test.npy"))
-    test_y = np.load(os.path.join(path, "test", "y_test.npy"))
 
     train_dataset = tf.data.Dataset.from_tensor_slices((train_X, train_y)).batch(args.batch_size).shuffle(len(train_X))
     val_dataset = tf.data.Dataset.from_tensor_slices((val_X, val_y)).batch(args.batch_size).shuffle(len(val_X))
-    test_dataset = tf.data.Dataset.from_tensor_slices((test_X, test_y)).batch(args.batch_size)
     
     logger.info(f"Training models: {', '.join(models)}")
     logger.info(f"Training with window: {window_length}")
@@ -54,7 +51,7 @@ if __name__ == "__main__":
         logger.info(f"Training model: {model}")
         dl_model = all_models[model](args.window_length)
         dl_hist = dl_model.fit(train_dataset, epochs=args.epochs, validation_data=val_dataset)
-        with open(os.path.join("data", "results", f"{model}_training_results.json"), "w") as f:
+        with open(os.path.join("data", "results", f"{model}_{window_length}_training_results.json"), "w") as f:
             json.dump(dl_hist.history, f)
-        dl_model.save(f"models/{model}.keras")
+        dl_model.save(f"models/{model}_{window_length}.keras")
         tf.keras.backend.clear_session()
