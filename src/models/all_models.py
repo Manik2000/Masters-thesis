@@ -1,5 +1,6 @@
 from keras import Sequential
-from keras.layers import LSTM, Conv1D, Dense, Dropout, Flatten, Input, MaxPooling1D
+from keras.layers import (LSTM, Conv1D, Dense, Dropout, Flatten, Input,
+                          MaxPooling1D)
 
 from src.models.attention import Attention
 from src.models.dain import Dain

@@ -9,7 +9,6 @@ from src.base_detector import BaseDetector
 from src.cp_detector import CPDetector
 from src.metrics import alpha_cp, annotation_error, f1_score, jaccard, rmse
 
-
 if __name__ == "__main__":
 
     traj_lengths = [50, 85, 120]

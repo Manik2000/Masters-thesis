@@ -8,7 +8,6 @@ from tqdm import tqdm
 from src.cp_detector import CPDetector
 from src.metrics import f1_score, rmse
 
-
 if __name__ == "__main__":
     cp_detector = CPDetector(os.path.join("models", "cnn_lstm_attention_15.keras"), 15)
     start_path = os.path.join("data", "alpha_Ds_diffs")

@@ -6,12 +6,8 @@ import os
 import numpy as np
 import tensorflow as tf
 
-from src.models.all_models import (
-    generate_cnn,
-    generate_cnn_lstm,
-    generate_cnn_lstm_attention,
-    generate_lstm,
-)
+from src.models.all_models import (generate_cnn, generate_cnn_lstm,
+                                   generate_cnn_lstm_attention, generate_lstm)
 
 if __name__ == "__main__":
     logging.basicConfig()
