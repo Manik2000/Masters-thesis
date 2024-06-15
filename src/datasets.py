@@ -31,8 +31,7 @@ class AndiDataset:
 
     def random_D_value(self):
         return (
-            np.random.choice(self.D_range)
-            * np.random.choice([np.random.uniform(0, 1), np.random.randint(1)], size=1)
+            np.random.choice(self.D_range) * np.random.uniform(0, 10)
         )[0]
 
     def get_alphas_and_Ds(self):

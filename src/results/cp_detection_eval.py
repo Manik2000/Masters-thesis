@@ -11,7 +11,7 @@ from src.metrics import alpha_cp, annotation_error, f1_score, jaccard, rmse
 
 if __name__ == "__main__":
 
-    traj_lengths = [50, 85, 120]
+    traj_lengths = [50, 120]
     path = os.path.join("data", "final_eval")
 
     base_detector = BaseDetector(window_length=20)
@@ -19,6 +19,7 @@ if __name__ == "__main__":
         CPDetector(
             model_path=os.path.join("models", f"cnn_lstm_attention_{window}.keras"),
             window_length=window,
+            threshold=0.9
         )
         for window in [10, 15, 20]
     ]
