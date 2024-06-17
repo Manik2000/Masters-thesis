@@ -45,19 +45,19 @@ if __name__ == "__main__":
     with open(os.path.join(start, "alpha.pkl"), "wb") as file:
         pickle.dump(alpha_dict, file)
 
-    D0 = 1e-3
+    K0 = 1e-3
     multiplies = [2, 5, 10, 25, 50, 75, 100, 200, 250, 500, 750, 1000]
 
-    Ds_dict = {}
+    Ks_dict = {}
 
-    for multiply in tqdm(multiplies, desc="D"):
-        Ds_dict[multiply] = {}
+    for multiply in tqdm(multiplies, desc="K"):
+        Ks_dict[multiply] = {}
 
         trajs, labels = generator.multi_state(
-            T=T, N=N, alphas=[[1.2, 0], [1.2, 0]], Ds=[[D0, 0], [D0 * multiply, 0]]
+            T=T, N=N, alphas=[[1.2, 0], [1.2, 0]], Ds=[[K0, 0], [K0 * multiply, 0]]
         )
-        Ds_dict[multiply]["traj"] = trajs
-        Ds_dict[multiply]["cp"] = [label_continuous_to_list(labels[:, i, :])[0] for i in range(N)]
+        Ks_dict[multiply]["traj"] = trajs
+        Ks_dict[multiply]["cp"] = [label_continuous_to_list(labels[:, i, :])[0] for i in range(N)]
 
-    with open(os.path.join(start, "Ds.pkl"), "wb") as file:
-        pickle.dump(Ds_dict, file)
+    with open(os.path.join(start, "Ks.pkl"), "wb") as file:
+        pickle.dump(Ks_dict, file)

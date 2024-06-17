@@ -11,20 +11,20 @@ from src.metrics import f1_score, rmse
 
 if __name__ == "__main__":
     cp_detector = CPDetector(os.path.join("models", "cnn_lstm_attention_15.keras"), 15, threshold=0.9)
-    start_path = os.path.join("data", "alpha_Ds_diffs")
+    start_path = os.path.join("data", "alpha_Ks_diffs")
 
     with open(os.path.join(start_path, "alpha.pkl"), "rb") as file:
         alphas_dict = pickle.load(file)
-    with open(os.path.join(start_path, "Ds.pkl"), "rb") as file:
-        Ds_dict = pickle.load(file)
+    with open(os.path.join(start_path, "Ks.pkl"), "rb") as file:
+        Ks_dict = pickle.load(file)
 
-    alphas_res = {}
+    alphas_res = {}  
 
-    data_dicts = [alphas_dict, Ds_dict]
+    data_dicts = [alphas_dict, Ks_dict]
     results = [{}, {}]
 
     for result_dict, data_dict, name in tqdm(
-        zip(results, data_dicts, ["alpha", "Ds"]), total=2, desc="alpha or D"
+        zip(results, data_dicts, ["alpha", "Ks"]), total=2, desc="alpha or K"
     ):
         for key in tqdm(data_dict.keys()):
             result_dict[key] = {}
