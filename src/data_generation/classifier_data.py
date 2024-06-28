@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from src.cp_utils import create_dataset
 from src.datasets import AndiDataset
 
+
 T = 150
 L = 1.5 * 128
 
@@ -101,7 +102,7 @@ def main(window_length):
     stochastic.random.seed(3)
     np.random.seed(7)
 
-    trajs_per_category = 250_000
+    trajs_per_category = 300_000
     change_points_per_category = int(trajs_per_category / 3)
     no_change_points_per_category = trajs_per_category - change_points_per_category
 
@@ -138,10 +139,10 @@ def main(window_length):
     y = np.array(y)
 
     X_train, X_test, y_train, y_test, labels_train, labels_test = train_test_split(
-        X, y, labels, test_size=0.2, random_state=42
+        X, y, labels, test_size=0.1, random_state=42
     )
     X_train, X_val, y_train, y_val, labels_train, labels_val = train_test_split(
-        X_train, y_train, labels_train, test_size=0.2, random_state=42
+        X_train, y_train, labels_train, test_size=0.12, random_state=42
     )
 
     path = os.path.join("data", "classifier", f"{window_length}")
